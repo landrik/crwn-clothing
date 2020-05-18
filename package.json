@@ -1,5 +1,6 @@
 {
   "name": "crwn-clothing",
+  "homepage": "https://crwn-apparels.herokuapp.com/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
