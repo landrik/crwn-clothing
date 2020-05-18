@@ -13,23 +13,11 @@ import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { setCurrentUser } from './redux/user/user.actions';
 import { selectCurrentUser } from "./redux/user/user.selectors";
 
-
-
-
 import './App.css';
 
 import * as ROUTES from './constants/routes';
 
-//require('dotenv').config();
-
 class App extends Component {
-  // constructor(){
-  //   super();
-  //   this.state = {
-  //     currentUser: null
-  //   }
-  // }
-
   unsubscribeFromAuth = null;
 
   componentDidMount(){
