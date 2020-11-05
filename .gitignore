@@ -10,8 +10,9 @@
 
 # production
 /build
+/public
 
-# misc
+# dotenv environment variables file
 .DS_Store
 .env
 .env.development
@@ -23,3 +24,4 @@ yarn-error.log*
 
 package-lock.json
 .gitignore
+yarn.lock

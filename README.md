@@ -1,68 +1,110 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# CRWN-CLOTHING
+A full-stack E-Commerce solution built entirely with JavaScript
 
-## Available Scripts
+[![Build Status]()](https://travis-ci.com/ovieokeh/ecommerce-turing)
+[![Maintainability]()](https://codeclimate.com/github/ovieokeh/ecommerce-turing/maintainability)
+[![Test Coverage]()](https://codeclimate.com/github/ovieokeh/ecommerce-turing/test_coverage)
 
-In the project directory, you can run:
+This is a monorepo containing the API and Frontend of the Shopstack e-commerce platform.
 
-### `yarn start`
+This project is an E-Commerce store that sells T-Shirts powered with a Stripe payment system. Here are the technologies used in the project.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Access the demo here: [Link to Hosted Demo](http://crwn-clothing.herokuapp.com/)
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## How To Run The App
+This app makes use of `.env` files to store sensitive data, it is located in the root folder and should contain the following data:
+```
+NODE_ENV=development
+PORT=[preferred port]
 
-### `yarn test`
+SALT_ROUNDS=[any integer > 0 && < 20]
+SECRET_KEY=[a string for encrypting JWT tokens]
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+REACT_APP_SITE_TITLE = [your react app name]
 
-### `yarn build`
+REACT_APP_API_KEY = [an api key from gotten from firebase]
+REACT_APP_AUTH_DOMAIN = [a domain name gotten from firebase]
+REACT_APP_DATABASE_URL = [a database url gotten from firebase]
+REACT_APP_PROJECT_ID = [project id name gotten from firebase]
+REACT_APP_STORAGE_BUCKET = [storage bucket name from firebase]
+REACT_APP_MESSAGING_SENDER_ID = [messaging sender id from firebase]
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+REACT_APP_STRIPE_PUBLISHABLE_KEY = [a stripe publishable key gotten from stripe]
+REACT_APP_STRIPE_SECRET_KEY = [a stripe secret key gotten from stripe]
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+After setting up the environment keys, you can then run the following commands to get the app started:
+```
+$ npm i && npm run install:all
+$ npm start
+```
+Now navigate to `http://localhost:<your_api_port>` from your browser and the app should be live.
 
-### `yarn eject`
+Building The App
+------
+If you want to build the app and run the compiled version locally, you have to add a `.env` file in the root directory of the project.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Then in the root directory, run the following commands:
+```
+$ npm run build
+$ npm start
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## How To Run The API Tests
+There are tests for all the API endpoints to ensure that they work as expected. To run them, first ensure that you have your environment keys setup then navigate to `/src/api` and run `npm t`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Project Info
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Backend API
 
-## Learn More
+Technologies used:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Node.js with Express.js
+- JWT for authentication
+- firebase for database management
+- Redis for server side caching of GET endpoints
+- Throng for worker management
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Access the API Documentation here: [Link to Documentation](https://shopstack-e.herokuapp.com/api-docs/). To access it on local, build the app, run `npm start` and navigate to `localhost:[port]/api-docs`.
 
-### Code Splitting
+The API is built on top of Node.js with the Express framework for performance and maintainability. For security, protected endpoints require a valid JWT token which is attached in the request headers like so:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+```
+user-key: <TOKEN>
+```
 
-### Analyzing the Bundle Size
+Most of the GET endpoints are cached with a high-performant Redis server to prevent unnecessary calls to the database. The cached data expires after 1 hour so that outdated content is refreshed automatically.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+There are integration tests for all the controllers that ensure that the API works as expected. To run the tests, run the following command from the root directory:
 
-### Making a Progressive Web App
+```
+cd src/api && npm run test
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+Note that for the tests to run, you have to create a `.env` file with these details:
 
-### Advanced Configuration
+```
+NODE_ENV=development
+PORT=<ANY_FREE_PORT>
+SALT_ROUNDS=<A_NUMBER_BETWEEN 1 - 10>
+SECRET_KEY=<A_LONG_STRING>
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+DB_USERNAME_TEST=<DATABASE_USERNAME>
+DB_PASSWORD_TEST=<DATABASE_PASSWORD>
+DB_NAME_TEST=<DATABASE_NAME>
+DB_HOST_TEST=<DATABASE_HOST>
 
-### Deployment
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+### Frontend App
 
-### `yarn build` fails to minify
+Technologies used:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- React.js
+- Redux (with Redux Thunk)
+- React Router
+- Axios (for network calls to the backend)
+- Sass (for styling)
+
+The frontend is a fully responsive Single Page Application (SPA) optimised for performance by limiting renders when possible.

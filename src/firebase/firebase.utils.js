@@ -41,7 +41,7 @@ const config = {
 //   messagingSenderId: process.env.REACT_APP_DEV_MESSAGING_SENDER_ID,
 // };
 
-// const config = process.env.NODE_ENV === 'production' ? prodConfig : devConfig;
+// const config = process.env.NODE_ENV === 'development' ? prodConfig : devConfig;
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
@@ -70,7 +70,37 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   
 };
 
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  const collectionRef = firestore.collection(collectionKey);
+  
+  const batch = firestore.batch();
+  objectsToAdd.forEach(obj => {
+    const newDocRef = collectionRef.doc();
+    batch.set(newDocRef, obj)
+  });
+
+  return await batch.commit()
+};
+
 firebase.initializeApp(config);
+
+export const convertCollectionsSnapshotToMap = collectionsSnapshot => {
+  const transformedCollection = collectionsSnapshot.docs.map(docSnapshot => {
+    const { title, items } = docSnapshot.data();
+
+    return {
+      id: docSnapshot.id, 
+      routeName: encodeURI(title.toLowerCase()),
+      title,
+      items
+    }
+  });
+
+  return transformedCollection.reduce((accumulator, collection) => {
+    accumulator[collection.title.toLowerCase()] = collection;
+    return accumulator;
+  }, {})
+}
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
